@@ -134,23 +134,40 @@ std::function<bool(edm4eic::TrackPoint)> richgeo::ActsGeo::TrackPointCut(int rad
 
     // get sphere centers
     std::vector<dd4hep::Position> mirror_centers;
-    for(int isec = 0; isec < m_det->constant<int>("DRICH_num_sectors"); isec++)
+    std::vector<double> mirror_radii;
+    for(int isec = 0; isec < m_det->constant<int>("DRICH_num_sectors"); isec++){
       mirror_centers.emplace_back(
-          m_det->constant<double>("DRICH_mirror_center_x_sec" + std::to_string(isec)) / dd4hep::mm,
-          m_det->constant<double>("DRICH_mirror_center_y_sec" + std::to_string(isec)) / dd4hep::mm,
-          m_det->constant<double>("DRICH_mirror_center_z_sec" + std::to_string(isec)) / dd4hep::mm
+          m_det->constant<double>("DRICH_mirror_1_center_x_sec" + std::to_string(isec)) / dd4hep::mm,
+          m_det->constant<double>("DRICH_mirror_1_center_y_sec" + std::to_string(isec)) / dd4hep::mm,
+          m_det->constant<double>("DRICH_mirror_1_center_z_sec" + std::to_string(isec)) / dd4hep::mm
           );
-    auto mirror_radius = m_det->constant<double>("DRICH_mirror_radius") / dd4hep::mm;
-
+      mirror_radii.push_back(m_det->constant<double>("DRICH_mirror_1_radius") / dd4hep::mm);
+      mirror_centers.emplace_back(
+          m_det->constant<double>("DRICH_mirror_2_center_x_sec" + std::to_string(isec)) / dd4hep::mm,
+          m_det->constant<double>("DRICH_mirror_2_center_y_sec" + std::to_string(isec)) / dd4hep::mm,
+          m_det->constant<double>("DRICH_mirror_2_center_z_sec" + std::to_string(isec)) / dd4hep::mm
+          );
+      mirror_radii.push_back(m_det->constant<double>("DRICH_mirror_2_radius") / dd4hep::mm);      
+      mirror_centers.emplace_back(
+          m_det->constant<double>("DRICH_mirror_3_center_x_sec" + std::to_string(isec)) / dd4hep::mm,
+          m_det->constant<double>("DRICH_mirror_3_center_y_sec" + std::to_string(isec)) / dd4hep::mm,
+          m_det->constant<double>("DRICH_mirror_3_center_z_sec" + std::to_string(isec)) / dd4hep::mm
+          );
+      mirror_radii.push_back(m_det->constant<double>("DRICH_mirror_3_radius") / dd4hep::mm);
+      
+    }
+    
     // beyond the mirror cut
-    return [mirror_centers, mirror_radius] (edm4eic::TrackPoint p) {
-      for(const auto& c : mirror_centers) {
-        auto dist = std::hypot(
+    return [mirror_centers, mirror_radii] (edm4eic::TrackPoint p) {      
+      for(size_t i = 0; i < mirror_centers.size(); i++){
+	auto c = mirror_centers[i];
+	auto r = mirror_radii[i];
+	auto dist = std::hypot(
             c.x() - p.position.x,
             c.y() - p.position.y,
             c.z() - p.position.z
             );
-        if(dist < mirror_radius)
+        if(dist < r)
           return true;
       }
       return false;
