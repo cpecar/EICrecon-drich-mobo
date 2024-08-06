@@ -34,8 +34,9 @@ namespace richgeo {
       CherenkovPhotonDetector* m_irtPhotonDetector;
       FlatSurface*             m_aerogelFlatSurface;
       FlatSurface*             m_filterFlatSurface;
-      SphericalSurface*        m_mirrorSphericalSurface;
-      OpticalBoundary*         m_mirrorOpticalBoundary;
+      SphericalSurfaceWithHalfSpace        *m_mirrorSphericalSurface_1, *m_mirrorSphericalSurface_2, *m_mirrorSphericalSurface_3;
+      FlatSurface *m_mirrorBackplaneSurface;
+      OpticalBoundary          *m_mirrorOpticalBoundary_1, *m_mirrorOpticalBoundary_2, *m_mirrorOpticalBoundary_3;
       FlatSurface*             m_sensorFlatSurface;
 
   };
