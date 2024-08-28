@@ -148,12 +148,6 @@ std::function<bool(edm4eic::TrackPoint)> richgeo::ActsGeo::TrackPointCut(int rad
           m_det->constant<double>("DRICH_mirror_2_center_z_sec" + std::to_string(isec)) / dd4hep::mm
           );
       mirror_radii.push_back(m_det->constant<double>("DRICH_mirror_2_radius") / dd4hep::mm);      
-      mirror_centers.emplace_back(
-          m_det->constant<double>("DRICH_mirror_3_center_x_sec" + std::to_string(isec)) / dd4hep::mm,
-          m_det->constant<double>("DRICH_mirror_3_center_y_sec" + std::to_string(isec)) / dd4hep::mm,
-          m_det->constant<double>("DRICH_mirror_3_center_z_sec" + std::to_string(isec)) / dd4hep::mm
-          );
-      mirror_radii.push_back(m_det->constant<double>("DRICH_mirror_3_radius") / dd4hep::mm);
       
     }
     

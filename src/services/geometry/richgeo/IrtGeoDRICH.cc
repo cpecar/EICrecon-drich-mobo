@@ -110,7 +110,7 @@ void richgeo::IrtGeoDRICH::DD4hep_to_IRT() {
     // mirrors and the half sapce cuts defining their size
     auto mirrorRadius_1 = m_det->constant<double>("DRICH_mirror_1_radius") / dd4hep::mm;
     auto mirrorRadius_2 = m_det->constant<double>("DRICH_mirror_2_radius") / dd4hep::mm;
-    auto mirrorRadius_3 = m_det->constant<double>("DRICH_mirror_3_radius") / dd4hep::mm;
+    
     dd4hep::Position mirrorCenter_1(
       m_det->constant<double>("DRICH_mirror_1_center_x_"+secName) / dd4hep::mm,
       m_det->constant<double>("DRICH_mirror_1_center_y_"+secName) / dd4hep::mm,
@@ -121,11 +121,7 @@ void richgeo::IrtGeoDRICH::DD4hep_to_IRT() {
       m_det->constant<double>("DRICH_mirror_2_center_y_"+secName) / dd4hep::mm,
       m_det->constant<double>("DRICH_mirror_2_center_z_"+secName) / dd4hep::mm
       );
-    dd4hep::Position mirrorCenter_3(
-      m_det->constant<double>("DRICH_mirror_3_center_x_"+secName) / dd4hep::mm,
-      m_det->constant<double>("DRICH_mirror_3_center_y_"+secName) / dd4hep::mm,
-      m_det->constant<double>("DRICH_mirror_3_center_z_"+secName) / dd4hep::mm
-      );
+
     // HS POINTS
     auto mirrorHS1_point_x_1 = m_det->constant<double>("DRICH_mirror_1_halfspace1_point_x_"+secName) / dd4hep::mm;
     auto mirrorHS1_point_y_1 = m_det->constant<double>("DRICH_mirror_1_halfspace1_point_y_"+secName) / dd4hep::mm;
@@ -135,17 +131,8 @@ void richgeo::IrtGeoDRICH::DD4hep_to_IRT() {
     auto mirrorHS1_point_y_2 = m_det->constant<double>("DRICH_mirror_2_halfspace1_point_y_"+secName) / dd4hep::mm;
     auto mirrorHS1_point_z_2 = m_det->constant<double>("DRICH_mirror_2_halfspace1_point_z_"+secName) / dd4hep::mm;
 
-    auto mirrorHS2_point_x_1 = m_det->constant<double>("DRICH_mirror_2_halfspace2_point_x_"+secName) / dd4hep::mm;
-    auto mirrorHS2_point_y_1 = m_det->constant<double>("DRICH_mirror_2_halfspace2_point_y_"+secName) / dd4hep::mm;
-    auto mirrorHS2_point_z_1 = m_det->constant<double>("DRICH_mirror_2_halfspace2_point_z_"+secName) / dd4hep::mm;
-
-    auto mirrorHS2_point_x_2 = m_det->constant<double>("DRICH_mirror_3_halfspace2_point_x_"+secName) / dd4hep::mm;
-    auto mirrorHS2_point_y_2 = m_det->constant<double>("DRICH_mirror_3_halfspace2_point_y_"+secName) / dd4hep::mm;
-    auto mirrorHS2_point_z_2 = m_det->constant<double>("DRICH_mirror_3_halfspace2_point_z_"+secName) / dd4hep::mm;
-
-    printf("sector %d mirror radii: %f %f %f \n",isec,mirrorRadius_1, mirrorRadius_2, mirrorRadius_3);
+    printf("sector %d mirror radii: %f %f \n",isec,mirrorRadius_1, mirrorRadius_2);
     printf("mirror 2 HS 1 point: %f %f %f \n",mirrorHS1_point_x_2,mirrorHS1_point_y_2,mirrorHS1_point_z_2);
-    printf("mirror 2 HS 2 point: %f %f %f \n",mirrorHS2_point_x_1,mirrorHS2_point_y_1,mirrorHS2_point_z_1);
     // HS NORMS
     auto mirrorHS1_norm_x_1 = m_det->constant<double>("DRICH_mirror_1_halfspace1_dir_x_"+secName);
     auto mirrorHS1_norm_y_1 = m_det->constant<double>("DRICH_mirror_1_halfspace1_dir_y_"+secName);
@@ -155,14 +142,6 @@ void richgeo::IrtGeoDRICH::DD4hep_to_IRT() {
     auto mirrorHS1_norm_y_2 = m_det->constant<double>("DRICH_mirror_2_halfspace1_dir_y_"+secName);
     auto mirrorHS1_norm_z_2 = m_det->constant<double>("DRICH_mirror_2_halfspace1_dir_z_"+secName);
 
-    auto mirrorHS2_norm_x_1 = m_det->constant<double>("DRICH_mirror_2_halfspace2_dir_x_"+secName);
-    auto mirrorHS2_norm_y_1 = m_det->constant<double>("DRICH_mirror_2_halfspace2_dir_y_"+secName);
-    auto mirrorHS2_norm_z_1 = m_det->constant<double>("DRICH_mirror_2_halfspace2_dir_z_"+secName);
-
-    auto mirrorHS2_norm_x_2 = m_det->constant<double>("DRICH_mirror_3_halfspace2_dir_x_"+secName);
-    auto mirrorHS2_norm_y_2 = m_det->constant<double>("DRICH_mirror_3_halfspace2_dir_y_"+secName);
-    auto mirrorHS2_norm_z_2 = m_det->constant<double>("DRICH_mirror_3_halfspace2_dir_z_"+secName);
-
     std::vector<std::pair<TVector3,TVector3>> HS_mirror1 = {
       std::make_pair(TVector3(mirrorHS1_norm_x_1,mirrorHS1_norm_y_1,mirrorHS1_norm_z_1),
 		     TVector3(mirrorHS1_point_x_1,mirrorHS1_point_y_1,mirrorHS1_point_z_1)
@@ -171,25 +150,13 @@ void richgeo::IrtGeoDRICH::DD4hep_to_IRT() {
     std::vector<std::pair<TVector3,TVector3>> HS_mirror2 = {
             std::make_pair(TVector3(mirrorHS1_norm_x_2,mirrorHS1_norm_y_2,mirrorHS1_norm_z_2),
 			   TVector3(mirrorHS1_point_x_2,mirrorHS1_point_y_2,mirrorHS1_point_z_2)
-			   ),	    
-	    std::make_pair(TVector3(mirrorHS2_norm_x_1,mirrorHS2_norm_y_1,mirrorHS2_norm_z_1),
-			   TVector3(mirrorHS2_point_x_1,mirrorHS2_point_y_1,mirrorHS2_point_z_1)
-			   )
+			   )	    
     };
-    std::vector<std::pair<TVector3,TVector3>> HS_mirror3 = {
-      std::make_pair(TVector3(mirrorHS2_norm_x_2,mirrorHS2_norm_y_2,mirrorHS2_norm_z_2),
-		     TVector3(mirrorHS2_point_x_2,mirrorHS2_point_y_2,mirrorHS2_point_z_2)
-		     )
-    };
-    
     m_mirrorSphericalSurface_1 = new SphericalSurfaceWithHalfSpace(TVector3(mirrorCenter_1.x(), mirrorCenter_1.y(), mirrorCenter_1.z()), mirrorRadius_1,
 								   HS_mirror1
 						    );
     m_mirrorSphericalSurface_2 = new SphericalSurfaceWithHalfSpace(TVector3(mirrorCenter_2.x(), mirrorCenter_2.y(), mirrorCenter_2.z()), mirrorRadius_2,
 								   HS_mirror2
-								   );
-    m_mirrorSphericalSurface_3 = new SphericalSurfaceWithHalfSpace(TVector3(mirrorCenter_3.x(), mirrorCenter_3.y(), mirrorCenter_3.z()), mirrorRadius_3,
-								   HS_mirror3
 								   );
     m_mirrorOpticalBoundary_1  = new OpticalBoundary(
         m_irtDetector->GetContainerVolume(), // CherenkovRadiator radiator
@@ -203,15 +170,8 @@ void richgeo::IrtGeoDRICH::DD4hep_to_IRT() {
         false,                                // bool refractive
 	true                                 // bool reflective
         );
-    m_mirrorOpticalBoundary_3  = new OpticalBoundary(
-        m_irtDetector->GetContainerVolume(), // CherenkovRadiator radiator
-        m_mirrorSphericalSurface_3,            // surface
-        false,                                // bool refractive
-	true                                 // bool reflective
-        );
     m_irtDetector->AddOpticalBoundary(isec, m_mirrorOpticalBoundary_1);
     m_irtDetector->AddOpticalBoundary(isec, m_mirrorOpticalBoundary_2);
-    m_irtDetector->AddOpticalBoundary(isec, m_mirrorOpticalBoundary_3);
     
     m_log->trace("");
     m_log->trace("  SECTOR {:d} MIRROR 1:", isec);
@@ -227,21 +187,12 @@ void richgeo::IrtGeoDRICH::DD4hep_to_IRT() {
     m_log->trace("    mirror z = {:f} mm", mirrorCenter_2.z());
     m_log->trace("    mirror R = {:f} mm", mirrorRadius_2);
 
-    m_log->trace("");
-    m_log->trace("  SECTOR {:d} MIRROR 3:", isec);
-    m_log->trace("    mirror x = {:f} mm", mirrorCenter_3.x());
-    m_log->trace("    mirror y = {:f} mm", mirrorCenter_3.y());
-    m_log->trace("    mirror z = {:f} mm", mirrorCenter_3.z());
-    m_log->trace("    mirror R = {:f} mm", mirrorRadius_3);
-
-    printf("made mirrors\n");
     
     // complete the radiator volume description; this is the rear side of the container gas volume
     // set to largest z of any of the given spherical mirror patches
 
     double maxZs[] = {mirrorCenter_1.z()+mirrorRadius_1,
-        mirrorCenter_2.z()+mirrorRadius_2,
-        mirrorCenter_3.z()+mirrorRadius_3};
+		      mirrorCenter_2.z()+mirrorRadius_2};
     double* minPtr = std::min_element(maxZs, maxZs + 3);
     int minIndex = std::distance(maxZs, minPtr);
     
@@ -355,7 +306,5 @@ richgeo::IrtGeoDRICH::~IrtGeoDRICH() {
   delete m_mirrorOpticalBoundary_1;
   delete m_mirrorSphericalSurface_2;
   delete m_mirrorOpticalBoundary_2;
-  delete m_mirrorSphericalSurface_3;
-  delete m_mirrorOpticalBoundary_3;
-  delete m_sensorFlatSurface;
+    delete m_sensorFlatSurface;
 }
