@@ -51,6 +51,9 @@ macro(plugin_add _name)
       PUBLIC $<BUILD_INTERFACE:${EICRECON_SOURCE_DIR}/src>
              $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>)
     target_include_directories(${_name}_plugin SYSTEM
+                               PUBLIC $ENV{EIC_SOFTWARE}/include)
+
+    target_include_directories(${_name}_plugin SYSTEM
                                PUBLIC ${JANA_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
     set_target_properties(
       ${_name}_plugin
